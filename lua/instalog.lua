@@ -1,7 +1,8 @@
 -- main module file
-local module = require("instalog.module")
+local module = require("instalog.context")
 
 local M = {}
+
 M.config = {
   -- default config
   opt = "Hello!",
@@ -14,9 +15,9 @@ M.setup = function(args)
   M.config = vim.tbl_deep_extend("force", M.config, args or {})
 end
 
--- "hello" is a public method for the plugin
-M.hello = function()
-  module.my_first_function()
+M.next_line = function()
+  local curr_line = module.get_file_defs()
+  vim.print(curr_line)
 end
 
 return M
