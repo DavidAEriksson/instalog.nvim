@@ -5,12 +5,12 @@ return {
       warn = 'warn',
       log = 'log',
       error = 'error',
-      debug = 'debug'
-    }
+      debug = 'debug',
+    },
   },
   lua = {
     log_statement = 'print',
     lhs_char = '(',
-    rhs_char = ')'
-  }
+    rhs_char = ')',
+  },
 }
