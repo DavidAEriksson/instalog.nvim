@@ -16,8 +16,7 @@ M.setup = function(args)
 end
 
 M.next_line = function()
-  local curr_line = module.get_file_defs()
-  vim.print(curr_line)
+  module.get_file_defs()
 end
 
 return M
