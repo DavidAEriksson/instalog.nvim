@@ -1,12 +1,9 @@
-local instalog = require("instalog")
+describe("instalog.setup", function()
+  local instalog = require("instalog")
+  local config = require("instalog.config")
 
-describe("setup", function()
-  it("works with default", function()
-    assert("my first function with param = Hello!", instalog.next_line())
-  end)
-
-  it("works with custom var", function()
-    instalog.setup({ opt = "custom" })
-    assert("my first function with param = custom", instalog.next_line())
+  it("delegates to config.setup", function()
+    instalog.setup({ format = "%file %line" })
+    assert.equals("%file %line", config.options.format)
   end)
 end)
