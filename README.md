@@ -6,3 +6,45 @@
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/ellisonleao/nvim-plugin-template/default.yml?branch=main&style=for-the-badge)
 
 </div>
+
+## Usage
+
+Call `:InstalogInsert` with the cursor on an identifier to insert a
+context-aware log statement at the nearest syntactically valid position:
+
+```lua
+require('instalog').setup({})
+```
+
+```ts
+const value = "hello"
+//     ^ cursor here, run :InstalogInsert
+console.log("~/dir/test.ts (Line 2): ", value)
+```
+
+## Supported languages
+
+Out of the box: `typescript`, `javascript`, `lua`, `go`, `python`.
+
+## Configuration
+
+```lua
+require('instalog').setup({
+  format = '%file (Line %line): ',  -- global default; %file, %line, %var
+  print_definitions = {
+    go = {
+      log_statement = 'fmt.Println',
+      format = '%file:%line ',       -- optional per-language override
+      block_types = { 'source_file', 'block' },
+      container_types = { 'function_declaration', 'method_declaration', 'for_statement' },
+    },
+  },
+})
+```
+
+To add or extend a language, add an entry under `print_definitions` with:
+- `log_statement` — the function to call (e.g. `console.log`, `fmt.Println`).
+- `block_types` — Tree-sitter node types whose children form a statement sequence.
+- `container_types` — Tree-sitter node types with a body (functions, loops, etc.) where the cursor may be in a header/signature.
+
+Use `:InspectTree` (built into Neovim) on a sample buffer to find the exact node type names for your language.
