@@ -1,10 +1,10 @@
-TESTS_INIT=tests/minimal_init.lua
+TESTS_INIT=$(CURDIR)/tests/minimal_init.lua
 TESTS_DIR=tests/
 
 .PHONY: test
 
 test:
-	@nvim \
+	@XDG_CONFIG_HOME=$$(mktemp -d) nvim \
 		--headless \
 		--noplugin \
 		-u ${TESTS_INIT} \
