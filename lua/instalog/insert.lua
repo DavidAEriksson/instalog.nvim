@@ -4,6 +4,20 @@ local format = require('instalog.format')
 
 local M = {}
 
+-- Node types that bind a runtime value a user would plausibly want to
+-- log. Deliberately excludes structural/type-level names that share the
+-- "identifier" family but aren't loggable on their own: `property_identifier`
+-- (an object/member property name - needs the receiver to resolve) and
+-- `type_identifier` (a type, not a value).
+local IDENTIFIER_TYPES = {
+  identifier = true,
+  -- Destructuring shorthand, e.g. the `image` in `{ image }`, which binds
+  -- a real local of the same name (unlike a renamed `key: value` pair,
+  -- where `key` is a `property_identifier` and only `value` is bound).
+  shorthand_property_identifier_pattern = true,
+  shorthand_property_identifier = true,
+}
+
 M.insert_log = function()
   local bufnr = vim.api.nvim_get_current_buf()
   local filetype = vim.bo[bufnr].filetype
@@ -22,7 +36,7 @@ M.insert_log = function()
     return
   end
 
-  if node:type() ~= 'identifier' then
+  if not IDENTIFIER_TYPES[node:type()] then
     vim.notify('Instalog: place the cursor on an identifier.', vim.log.levels.INFO)
     return
   end

@@ -5,6 +5,8 @@ local function set_buffer_lines(lines, filetype)
   local buf = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
   vim.api.nvim_buf_set_option(buf, "filetype", filetype)
+  vim.bo[buf].expandtab = true
+  vim.bo[buf].shiftwidth = 2
   vim.api.nvim_set_current_buf(buf)
   vim.treesitter.start(buf, filetype)
   vim.treesitter.get_parser(buf, filetype):parse()
@@ -28,6 +30,19 @@ describe("insert.insert_log", function()
 
     local cursor = vim.api.nvim_win_get_cursor(0)
     assert.equals(2, cursor[1])
+  end)
+
+  it("inserts a console.log line for a destructured parameter's shorthand binding (typescript)", function()
+    local buf = set_buffer_lines({
+      "function BoxImagePreview({ image }: { image: BoxImage }) {",
+      "}",
+    }, "typescript")
+    vim.api.nvim_win_set_cursor(0, { 1, 27 }) -- on "image" inside the destructuring pattern
+
+    insert.insert_log()
+
+    local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+    assert.matches('^  console%.log%(".*%(Line 2%): ", image%)$', lines[2])
   end)
 
   it("notifies and does not insert when the cursor is not on an identifier", function()
