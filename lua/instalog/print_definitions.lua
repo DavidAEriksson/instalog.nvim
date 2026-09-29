@@ -13,6 +13,20 @@ return {
       'while_statement',
     },
   },
+  typescriptreact = {
+    log_statement = 'console.log',
+    block_types = { 'program', 'statement_block', 'class_body' },
+    container_types = {
+      'function_declaration',
+      'method_definition',
+      'arrow_function',
+      'function_expression',
+      'if_statement',
+      'for_statement',
+      'for_in_statement',
+      'while_statement',
+    },
+  },
   javascript = {
     log_statement = 'console.log',
     block_types = { 'program', 'statement_block', 'class_body' },
