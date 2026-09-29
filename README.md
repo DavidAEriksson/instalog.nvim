@@ -15,6 +15,17 @@ gracefully warn instead of crash. Install the parser for a language
 before using it: `:TSInstall typescript javascript lua go python`
 (requires [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)).
 
+## Installation
+
+Using [Lazy](https://github.com/folke/lazy.nvim)
+
+```lua
+{
+    "DavidAEriksson/instalog.nvim"
+}
+
+```
+
 ## Usage
 
 Call `:InstalogInsert` with the cursor on an identifier to insert a
@@ -25,14 +36,14 @@ require('instalog').setup({})
 ```
 
 ```ts
-const value = "hello"
+const value = "hello";
 //     ^ cursor here, run :InstalogInsert
-console.log("~/dir/test.ts (Line 2): ", value)
+console.log("~/dir/test.ts (Line 2): ", value);
 ```
 
 ## Supported languages
 
-Out of the box: `typescript`, `javascript`, `lua`, `go`, `python`.
+Out of the box: `typescript`, `typescriptreact`, `javascript`, `lua`, `go`, `python`.
 
 ## Configuration
 
@@ -51,6 +62,7 @@ require('instalog').setup({
 ```
 
 To add or extend a language, add an entry under `print_definitions` with:
+
 - `log_statement` — the function to call (e.g. `console.log`, `fmt.Println`).
 - `block_types` — Tree-sitter node types whose children form a statement sequence.
 - `container_types` — Tree-sitter node types with a body (functions, loops, etc.) where the cursor may be in a header/signature.
