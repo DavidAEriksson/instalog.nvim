@@ -44,6 +44,7 @@ M.insert_log = function()
 
   local log_line = indent .. lang_config.log_statement .. '(' .. string.format('%q', message) .. ', ' .. var_name .. ')'
   vim.api.nvim_buf_set_lines(bufnr, insert_row, insert_row, false, { log_line })
+  vim.api.nvim_win_set_cursor(0, { insert_row + 1, #indent })
 end
 
 return M

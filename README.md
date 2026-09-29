@@ -7,6 +7,14 @@
 
 </div>
 
+## Requirements
+
+Neovim 0.10+. `vim.treesitter.get_node()` needs to return `nil` for a
+buffer with no available parser rather than throwing — relied on to
+gracefully warn instead of crash. Install the parser for a language
+before using it: `:TSInstall typescript javascript lua go python`
+(requires [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)).
+
 ## Usage
 
 Call `:InstalogInsert` with the cursor on an identifier to insert a

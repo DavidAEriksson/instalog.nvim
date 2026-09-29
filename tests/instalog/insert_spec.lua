@@ -25,6 +25,9 @@ describe("insert.insert_log", function()
     local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
     assert.equals('const value = "hello"', lines[1])
     assert.matches('^console%.log%(".*%(Line 2%): ", value%)$', lines[2])
+
+    local cursor = vim.api.nvim_win_get_cursor(0)
+    assert.equals(2, cursor[1])
   end)
 
   it("notifies and does not insert when the cursor is not on an identifier", function()
@@ -45,6 +48,34 @@ describe("insert.insert_log", function()
 
   it("notifies and does not insert for an unconfigured filetype", function()
     local buf = set_buffer_lines({ "print('hi')" }, "markdown")
+    vim.api.nvim_win_set_cursor(0, { 1, 1 })
+
+    local notified = false
+    local original_notify = vim.notify
+    vim.notify = function(...) notified = true end
+
+    insert.insert_log()
+    vim.notify = original_notify
+
+    local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+    assert.equals(1, #lines)
+    assert.is_true(notified)
+  end)
+
+  it("notifies and does not insert when the filetype is configured but has no installed parser", function()
+    config.setup({
+      print_definitions = {
+        cobol = {
+          log_statement = "DISPLAY",
+          block_types = { "program" },
+          container_types = {},
+        },
+      },
+    })
+    local buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, { "some cobol source" })
+    vim.api.nvim_buf_set_option(buf, "filetype", "cobol")
+    vim.api.nvim_set_current_buf(buf)
     vim.api.nvim_win_set_cursor(0, { 1, 1 })
 
     local notified = false
